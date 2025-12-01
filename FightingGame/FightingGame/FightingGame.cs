@@ -29,7 +29,6 @@ namespace FightingGame
                 {
                     case "1":
                         int dmg = rnd.Next(1, 21);
-                        // KRİTİK VURUŞ MANTIĞI (%20 Şans)
                         int critChance = rnd.Next(1, 101);
                         if (critChance >= 80)
                         {
@@ -42,7 +41,7 @@ namespace FightingGame
                         }
                         if (Goblin.Can > 0)
                         {
-                            int goblinDmg = rnd.Next(1, 15); // Goblin biraz daha az vursun, oyun adil olsun :)
+                            int goblinDmg = rnd.Next(1, 15);
                             Goblin.Saldir(Deniz, goblinDmg);
                             if (beklemeSuresi > 0) --beklemeSuresi;
                         }
@@ -62,7 +61,7 @@ namespace FightingGame
                         {
                             int healAmount = rnd.Next(5, 15);
                             Deniz.Iyiles(healAmount);
-                            beklemeSuresi = 3; // Cezayı kes
+                            beklemeSuresi = 3; 
                         }
                         else
                         {
