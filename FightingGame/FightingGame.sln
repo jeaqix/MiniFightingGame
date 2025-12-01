@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36429.23
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FightingGame", "ConsoleApp1\FightingGame.csproj", "{8A79E53D-9DE6-48C1-AACA-8A5020530FC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FightingGame", "FightingGame\FightingGame.csproj", "{D238A7D3-831F-A14B-2FCC-7A42A3EC25FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8A79E53D-9DE6-48C1-AACA-8A5020530FC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A79E53D-9DE6-48C1-AACA-8A5020530FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A79E53D-9DE6-48C1-AACA-8A5020530FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A79E53D-9DE6-48C1-AACA-8A5020530FC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D238A7D3-831F-A14B-2FCC-7A42A3EC25FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D238A7D3-831F-A14B-2FCC-7A42A3EC25FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D238A7D3-831F-A14B-2FCC-7A42A3EC25FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D238A7D3-831F-A14B-2FCC-7A42A3EC25FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
