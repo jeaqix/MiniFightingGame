@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 namespace FightingGame
 {
     class Program
@@ -8,122 +9,130 @@ namespace FightingGame
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Random rnd = new Random();
-            int beklemeSuresi = 0;
-            Karakter Deniz = new Karakter("Deniz", 100, "A1");
-            Dusman Goblin = new Dusman("Goblin", 100, "Goblin");
-            Console.WriteLine("⚔️ Oyun Başlıyor...");
-            bool oyunDevam = true;
-            while (oyunDevam)
+            int healCooldown = 0;
+            Character player = new Character("Raphael", 100, "A1");
+            Opponent enemy = new Opponent("Goblin", 100, "Goblin");
+            Console.WriteLine("⚔️ Game is Starting...");
+            bool gameIsRunning = true;
+            while (gameIsRunning)
             {
-                Console.WriteLine("\n=== OYUN MENÜSÜ ===");
-                Console.WriteLine("1 - Saldır ⚔️");
-                Console.WriteLine("2 - İyileş 💖");
-                Console.WriteLine("3 - Çıkış 🚪");
-                Console.WriteLine($"Durum -> {Deniz.Isim}: {Deniz.Can} HP | {Goblin.Isim}: {Goblin.Can} HP");
-                if (beklemeSuresi > 0) Console.WriteLine($"⚠️ İyileşme Bekleme Süresi: {beklemeSuresi} tur");
-                Console.Write("Seçiminiz: ");
-                ConsoleKeyInfo tusBilgisi = Console.ReadKey(false);
-                string secim = tusBilgisi.KeyChar.ToString();
+                Console.WriteLine("\n=== GAME MENU ===");
+                Console.WriteLine("1 - Attack ⚔️");
+                Console.WriteLine("2 - Heal 💖");
+                Console.WriteLine("3 - Leave 🚪");
+                Console.WriteLine($"Status -> {player.Name}: {player.HealthPoint} HP | {enemy.Name}: {enemy.HealthPoint} HP");
+                if (healCooldown > 0) Console.WriteLine($"⚠️ Heal cooldown: {healCooldown} turns remaining.");
+                Console.Write("Your Choice: ");
+                ConsoleKeyInfo keyStrokeInfo = Console.ReadKey(false);
+                string choice = keyStrokeInfo.KeyChar.ToString();
                 Console.WriteLine();
-                switch (secim)
+                switch (choice)
                 {
                     case "1":
                         int dmg = rnd.Next(1, 21);
                         int critChance = rnd.Next(1, 101);
-                        if (critChance >= 80)
-                        {
-                            Console.WriteLine("\n🔥 KRİTİK VURUŞ! Hasar ikiye katlandı! 🔥");
-                            Deniz.Saldir(Goblin, dmg * 2);
+                        if (critChance >= 80)                         {
+                            Console.WriteLine("\n🔥 CRITICAL HIT! Damage doubled! 🔥");
+                            player.Attack(enemy, dmg * 2);
                         }
                         else
                         {
-                            Deniz.Saldir(Goblin, dmg);
+                            player.Attack(enemy, dmg);
                         }
-                        if (Goblin.Can > 0)
+                        if (enemy.HealthPoint > 0)
                         {
-                            int goblinDmg = rnd.Next(1, 15);
-                            Goblin.Saldir(Deniz, goblinDmg);
-                            if (beklemeSuresi > 0) --beklemeSuresi;
+                            int enemyDmg = rnd.Next(1, 15);
+                            enemy.Attack(player, enemyDmg);
+                            if (healCooldown > 0) --healCooldown;
                         }
-                        if (Goblin.Can <= 0)
+                        if (enemy.HealthPoint <= 0)
                         {
-                            Console.WriteLine("\n🏆 TEBRİKLER! Goblin'i yendiniz!");
-                            oyunDevam = false;
+                            Console.WriteLine($"\n🏆 CONGRATULATIONS! You defeated the {enemy.Name}!");
+                            gameIsRunning = false;
                         }
-                        else if (Deniz.Can <= 0)
+                        else if (player.HealthPoint <= 0)
                         {
-                            Console.WriteLine("\n💀 ÖLDÜNÜZ! Oyun Bitti.");
-                            oyunDevam = false;
+                            Console.WriteLine("\n💀 GAME OVER! You died.");
+                            gameIsRunning = false;
                         }
                         break;
+
                     case "2":
-                        if (beklemeSuresi <= 0)
+                        if (healCooldown <= 0)
                         {
                             int healAmount = rnd.Next(5, 15);
-                            Deniz.Iyiles(healAmount);
-                            beklemeSuresi = 3; 
+                            player.Heal(healAmount);
+                            healCooldown = 3;
                         }
                         else
                         {
-                            Console.WriteLine("\n❌ İyileşme bekleme süresinde! Tur kaybetmedin, tekrar seç.");
+                            Console.WriteLine("\n❌ You cannot heal yet! Cooldown is active.");
                         }
                         break;
                     case "3":
-                        oyunDevam = false;
-                        Console.WriteLine("Oyundan çıkılıyor...");
+                        gameIsRunning = false;
+                        Console.WriteLine("Exiting game...");
                         break;
+
                     default:
-                        Console.WriteLine("Geçersiz seçim! Lütfen 1, 2 veya 3'e basın.");
+                        Console.WriteLine("Invalid choice! Please press 1, 2, or 3.");
                         break;
                 }
             }
-            Console.WriteLine("Çıkmak için bir tuşa basın...");
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
     }
-    public class Canli
+    public class Being
     {
-        public string Isim { get; set; }
-        public int Can { get; set; }
-        public int MaxCan { get; set; } = 100;
-        public Canli(string isim, int can)
+        public string Name { get; set; }
+        public int HealthPoint { get; set; }
+        public int MaxHealthPoint { get; set; } = 100;
+        public Being(string name, int healthPoint)
         {
-            Isim = isim;
-            Can = can;
+            Name = name;
+            HealthPoint = healthPoint;
         }
-        public void HasarAl(int hasar)
+
+        public void TakeDamage(int damage)
         {
-            Can -= hasar;
-            if (Can < 0) Can = 0;
-            Console.WriteLine($"> {Isim} {hasar} hasar aldı. (Kalan Can: {Can})");
+            HealthPoint -= damage;
+            if (HealthPoint < 0) HealthPoint = 0;
+            Console.WriteLine($"> {Name} took {damage} damage. (Current HP: {HealthPoint})");
         }
-        public void Iyiles(int iyiles)
+
+        public void Heal(int healAmount)
         {
-            Can += iyiles;
-            if (Can > MaxCan) Can = MaxCan;
-            Console.WriteLine($"> ✨ Hızlıca iyileştin! Düşman sana vuramadı. {Isim} {iyiles} HP kazandı. (Güncel Can: {Can})");
+            HealthPoint += healAmount;
+            if (HealthPoint > MaxHealthPoint) HealthPoint = MaxHealthPoint;
+
+            Console.WriteLine($"> ✨ Quick Heal! Enemy missed. {Name} gained {healAmount} HP. (Current HP: {HealthPoint})");
         }
-        public void Saldir(Canli hedef, int hasar)
+
+        public void Attack(Being target, int damage)
         {
-            Console.WriteLine($"\n{Isim}, {hedef.Isim} hedefine saldırıyor!");
-            hedef.HasarAl(hasar);
-        }
-    }
-    public class Karakter : Canli
-    {
-        public string OyuncuId { get; set; }
-        public Karakter(string isim, int can, string id) : base(isim, can)
-        {
-            OyuncuId = id;
+            Console.WriteLine($"\n{Name} is attacking {target.Name}!");
+            target.TakeDamage(damage);
         }
     }
 
-    public class Dusman : Canli
+    public class Character : Being
     {
-        public string DusmanTuru { get; set; }
-        public Dusman(string isim, int can, string tur) : base(isim, can)
+        public string CharacterID { get; set; }
+
+        public Character(string name, int healthPoint, string id) : base(name, healthPoint)
         {
-            DusmanTuru = tur;
+            CharacterID = id;
+        }
+    }
+
+    public class Opponent : Being
+    {
+        public string OpponentType { get; set; }
+
+        public Opponent(string name, int healthPoint, string type) : base(name, healthPoint)
+        {
+            OpponentType = type;
         }
     }
 }
